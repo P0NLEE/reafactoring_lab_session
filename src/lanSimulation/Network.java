@@ -176,7 +176,7 @@ which should be treated by all nodes.
 				report.write("\tNode '");
 				report.write(currentNode.name_);
 				report.write("' accepts broadcase packet.\n");
-				logging(report, currentNode);
+				currentNode.logging(report, this);
 			} catch (IOException exc) {
 				// just ignore
 			};
@@ -225,7 +225,7 @@ Therefore #receiver sends a packet across the token ring network, until either
 		startNode = (Node) workstations_.get(workstation);
 
 		try {
-			logging(report, startNode);
+			startNode.logging(report, this);
 		} catch (IOException exc) {
 			// just ignore
 		};
@@ -233,7 +233,7 @@ Therefore #receiver sends a packet across the token ring network, until either
 		while ((! packet.destination_.equals(currentNode.name_))
 				& (! packet.origin_.equals(currentNode.name_))) {
 			try {
-				logging(report, currentNode);
+				currentNode.logging(report, this);
 			} catch (IOException exc) {
 				// just ignore
 			};
@@ -241,7 +241,7 @@ Therefore #receiver sends a packet across the token ring network, until either
 		};
 
 		if (packet.destination_.equals(currentNode.name_)) {
-			result = printDocument(currentNode, packet, report);
+			result = packet.printDocument(currentNode, this, report);
 		} else {
 			try {
 				report.write(">>> Destinition not found, print job cancelled.\n\n");
@@ -255,54 +255,7 @@ Therefore #receiver sends a packet across the token ring network, until either
 		return result;
 	}
 
-	private void logging(Writer report, Node startNode) throws IOException {
-		report.write("\tNode '");
-		report.write(startNode.name_);
-		report.write("' passes packet on.\n");
-		report.flush();
-	}
-
-	private boolean printDocument (Node printer, Packet document, Writer report) {
-		String author = "Unknown";
-		String title = "Untitled";
-		int startPos = 0, endPos = 0;
-
-		if (printer.type_ == Node.PRINTER) {
-			try {
-				if (document.message_.startsWith("!PS")) {
-					startPos = document.message_.indexOf("author:");
-					if (startPos >= 0) {
-						endPos = document.message_.indexOf(".", startPos + 7);
-						if (endPos < 0) {endPos = document.message_.length();};
-						author = document.message_.substring(startPos + 7, endPos);};
-						startPos = document.message_.indexOf("title:");
-						if (startPos >= 0) {
-							endPos = document.message_.indexOf(".", startPos + 6);
-							if (endPos < 0) {endPos = document.message_.length();};
-							title = document.message_.substring(startPos + 6, endPos);};
-							accounting(report, author, title);
-				} else {
-					title = "ASCII DOCUMENT";
-					if (document.message_.length() >= 16) {
-						author = document.message_.substring(8, 16);};
-						accounting(report, author, title);
-				};
-			} catch (IOException exc) {
-				// just ignore
-			};
-			return true;
-		} else {
-			try {
-				report.write(">>> Destinition is not a printer, print job cancelled.\n\n");
-				report.flush();
-			} catch (IOException exc) {
-				// just ignore
-			};
-			return false;
-		}
-	}
-
-	private void accounting(Writer report, String author, String title) throws IOException {
+	public void accounting(Writer report, String author, String title) throws IOException {
 		report.write("\tAccounting -- author = '");
 		report.write(author);
 		report.write("' -- title = '");
