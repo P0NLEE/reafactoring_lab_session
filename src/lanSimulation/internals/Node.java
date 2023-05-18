@@ -79,6 +79,12 @@ Construct a <em>Node</em> with given #type and #name, and which is linked to #ne
 		nextNode_ = nextNode;
 	}
 
+	/**
+	 * "Logs an action report for this node."
+	 *
+	 * @param report The report writer to write to.
+	 * @param network The network object that the message is being sent over.
+	 */
 	public void logging(Writer report, Network network) throws IOException {
 		report.write("\tNode '");
 		report.write(name_);
@@ -86,6 +92,11 @@ Construct a <em>Node</em> with given #type and #name, and which is linked to #ne
 		report.flush();
 	}
 
+	/**
+	 * Prints the name of the node and the type of the node.
+	 *
+	 * @param buf The StringBuffer to print the node on.
+	 */
 	public void printOnMove(StringBuffer buf, Network network) {
 		switch (type_) {
 		case Node.NODE:
@@ -109,6 +120,11 @@ Construct a <em>Node</em> with given #type and #name, and which is linked to #ne
 		};
 	}
 
+	/**
+	 * Print the XML representation of this node on the given buffer.
+	 *
+	 * @param buf The StringBuffer to print the XML to.
+	 */
 	public void printXMLOnMove(StringBuffer buf, Network network) {
 		switch (type_) {
 		case Node.NODE:

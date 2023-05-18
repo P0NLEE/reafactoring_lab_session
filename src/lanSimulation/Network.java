@@ -255,10 +255,17 @@ Therefore #receiver sends a packet across the token ring network, until either
 		return result;
 	}
 
+	/**
+	 * If the packet's destination is the same as the current node's name, then we're at the destination.
+	 */
 	private boolean atDestination(Node currentNode, Packet packet) {
 		return packet.destination_.equals(currentNode.name_);
 	}
 
+	/**
+	 * "This function writes a report to a Writer object, and it throws an IOException if the Writer object throws an
+	 * IOException."
+	 */
 	public void accounting(Writer report, String author, String title) throws IOException {
 		report.write("\tAccounting -- author = '");
 		report.write(author);

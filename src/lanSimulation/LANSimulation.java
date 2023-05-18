@@ -25,10 +25,16 @@ import java.io.*;
 
 public class LANSimulation {
 
+	/**
+	 * It runs all the tests in the LANTests class
+	 */
 	public static void doRegressionTests () {
 		junit.textui.TestRunner.run (LANTests.suite());
 	}
 
+	/**
+	 * It simulates the network and prints the report
+	 */
 	public static void simulate () {
 		Network network = Network.DefaultExample();
 		StringWriter report = new StringWriter(100);
@@ -114,6 +120,12 @@ public class LANSimulation {
 		System.out.println(report.toString());
 	}
 
+	/**
+	 * If the first argument is 't', then do regression tests. If the first argument is 's', then simulate the LAN. Otherwise,
+	 * print an error message
+	 *
+	 * @param args the command line arguments
+	 */
 	public static void main (String args[]) {
 
 		if (args.length <= 0) {
