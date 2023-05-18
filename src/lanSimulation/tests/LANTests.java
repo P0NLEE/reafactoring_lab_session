@@ -137,18 +137,13 @@ public class LANTests extends TestCase {
     }
 
     public void testBasicNode() {
-        Node node;
+    	Node node;
 
-    	node = new Node(Node.NODE, "n");
-        assertEquals("type_",
-            node.type_, Node.NODE);
-        assertEquals("name_",
-            node.name_, "n");
-        assertEquals("nextNode_",
-            node.nextNode_, null);
-        node.nextNode_ = node;
-        assertEquals("nextNode_ (after setting)",
-            node.nextNode_, node);
+		node = new Node("n");
+		assertEquals("name_", node.name_, "n");
+		assertNull("nextNode_", node.nextNode_);
+		node.nextNode_ = node;
+		assertEquals("nextNode_ (after setting)", node.nextNode_, node);
     }
 
     public void testDefaultNetworkToString() {

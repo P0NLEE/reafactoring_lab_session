@@ -31,23 +31,6 @@ Several types of Nodes exist.
 public class Node {
 	//enumeration constants specifying all legal node types
 	/**
-    A node with type NODE has only basic functionality.
-	 */
-	public static final byte NODE = 0;
-	/**
-    A node with type WORKSTATION may initiate requests on the LAN.
-	 */
-	public static final byte WORKSTATION = 1;
-	/**
-    A node with type PRINTER may accept packages to be printed.
-	 */
-	public static final byte PRINTER = 2;
-
-	/**
-    Holds the type of the Node.
-	 */
-	public byte type_;
-	/**
     Holds the name of the Node.
 	 */
 	public String name_;
@@ -61,9 +44,7 @@ public class Node {
 Construct a <em>Node</em> with given #type and #name.
 <p><strong>Precondition:</strong> (type >= NODE) & (type <= PRINTER);</p>
 	 */
-	public Node(byte type, String name) {
-		assert (type >= NODE) & (type <= PRINTER);
-		type_ = type;
+	public Node(String name) {
 		name_ = name;
 		nextNode_ = null;
 	}
@@ -72,9 +53,7 @@ Construct a <em>Node</em> with given #type and #name.
 Construct a <em>Node</em> with given #type and #name, and which is linked to #nextNode.
 <p><strong>Precondition:</strong> (type >= NODE) & (type <= PRINTER);</p>
 	 */
-	public Node(byte type, String name, Node nextNode) {
-		assert (type >= NODE) & (type <= PRINTER);
-		type_ = type;
+	public Node(String name, Node nextNode) {
 		name_ = name;
 		nextNode_ = nextNode;
 	}
@@ -91,61 +70,35 @@ Construct a <em>Node</em> with given #type and #name, and which is linked to #ne
 		report.write("' passes packet on.\n");
 		report.flush();
 	}
-
+	
 	/**
-	 * Prints the name of the node and the type of the node.
-	 *
-	 * @param buf The StringBuffer to print the node on.
+Write a printable representation of #receiver on the given #buf.
+<p><strong>Precondition:</strong> isInitialized();</p>
 	 */
-	public void printOnMove(StringBuffer buf, Network network) {
-		switch (type_) {
-		case Node.NODE:
-			buf.append("Node ");
-			buf.append(name_);
-			buf.append(" [Node]");
-			break;
-		case Node.WORKSTATION:
-			buf.append("Workstation ");
-			buf.append(name_);
-			buf.append(" [Workstation]");
-			break;
-		case Node.PRINTER:
-			buf.append("Printer ");
-			buf.append(name_);
-			buf.append(" [Printer]");
-			break;
-		default:
-			buf.append("(Unexpected)");;
-			break;
-		};
+	public void printOn(StringBuffer buf) {
+		buf.append("Node ");
+		buf.append(name_);
+		buf.append(" [Node]");
 	}
 
 	/**
-	 * Print the XML representation of this node on the given buffer.
-	 *
-	 * @param buf The StringBuffer to print the XML to.
+Write a HTML representation of #receiver on the given #buf.
+ <p><strong>Precondition:</strong> isInitialized();</p>
 	 */
-	public void printXMLOnMove(StringBuffer buf, Network network) {
-		switch (type_) {
-		case Node.NODE:
-			buf.append("<node>");
-			buf.append(name_);
-			buf.append("</node>");
-			break;
-		case Node.WORKSTATION:
-			buf.append("<workstation>");
-			buf.append(name_);
-			buf.append("</workstation>");
-			break;
-		case Node.PRINTER:
-			buf.append("<printer>");
-			buf.append(name_);
-			buf.append("</printer>");
-			break;
-		default:
-			buf.append("<unknown></unknown>");;
-			break;
-		};
+	public void printHTMLOn(StringBuffer buf) {
+		buf.append("Node ");
+		buf.append(name_);
+		buf.append(" [Node]");
+	}
+
+	/**
+Write an XML representation of #receiver on the given #buf.
+<p><strong>Precondition:</strong> isInitialized();</p>
+	 */
+	public void printXMLOn(StringBuffer buf) {
+		buf.append("<node>");
+		buf.append(name_);
+		buf.append("</node>");
 	}
 
 }

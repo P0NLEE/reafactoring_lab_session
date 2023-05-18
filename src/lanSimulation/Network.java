@@ -70,10 +70,10 @@ Currently, the network looks as follows.
 	public static Network DefaultExample () {
 		Network network = new Network (2);
 
-		Node wsFilip = new Node (Node.WORKSTATION, "Filip");
-		Node n1 = new Node(Node.NODE, "n1");
-		Node wsHans = new Node (Node.WORKSTATION, "Hans");
-		Node prAndy = new Node (Node.PRINTER, "Andy");
+		Node wsFilip = new Workstation( "Filip");
+		Node n1 = new Node( "n1");
+		Node wsHans = new Workstation( "Hans");
+		Node prAndy = new Printer("Andy");
 
 		wsFilip.nextNode_ = n1;
 		n1.nextNode_ = wsHans;
@@ -109,7 +109,7 @@ Answer whether #receiver contains a workstation with the given name.
 		if (n == null) {
 			return false;
 		} else {
-			return n.type_ == Node.WORKSTATION;
+			return n instanceof Workstation;
 		}
 	};
 
@@ -135,15 +135,15 @@ A consistent token ring network
 		iter = workstations_.elements();
 		while (iter.hasMoreElements()) {
 			currentNode = (Node) iter.nextElement();
-			if (currentNode.type_ != Node.WORKSTATION) {return false;};
+			if (!(currentNode instanceof Workstation)) {return false;};
 		};
 		//enumerate the token ring, verifying whether all workstations are registered
 		//also count the number of printers and see whether the ring is circular
 		currentNode = firstNode_;
 		while (! encountered.containsKey(currentNode.name_)) {
 			encountered.put(currentNode.name_, currentNode);
-			if (currentNode.type_ == Node.WORKSTATION) {workstationsFound++;};
-			if (currentNode.type_ == Node.PRINTER) {printersFound++;};
+			if (currentNode instanceof Workstation) {workstationsFound++;};
+			if (currentNode instanceof Printer) {printersFound++;};
 			currentNode = send(currentNode);
 		};
 		if (currentNode != firstNode_) {return false;};//not circular
@@ -295,7 +295,7 @@ Write a printable representation of #receiver on the given #buf.
 		assert isInitialized();
 		Node currentNode = firstNode_;
 		do {
-			currentNode.printOnMove(buf, this);
+			currentNode.printOn(buf);
 			buf.append(" -> ");
 			currentNode = send(currentNode);
 		} while (currentNode != firstNode_);
@@ -318,7 +318,7 @@ Write a HTML representation of #receiver on the given #buf.
 		buf.append("\n\n<UL>");
 		do {
 			buf.append("\n\t<LI> ");
-			currentNode.printOnMove(buf, this);
+			currentNode.printHTMLOn(buf);
 			buf.append(" </LI>");
 			currentNode = send(currentNode);
 		} while (currentNode != firstNode_);
@@ -336,11 +336,10 @@ Write an XML representation of #receiver on the given #buf.
 		buf.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<network>");
 		do {
 			buf.append("\n\t");
-			currentNode.printXMLOnMove(buf, this);
+			currentNode.printXMLOn(buf);
 			currentNode = send(currentNode);
 		} while (currentNode != firstNode_);
 		buf.append("\n</network>");
-	}
-	
+	}	
 
 }
